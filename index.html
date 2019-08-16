@@ -6,10 +6,85 @@
     <title>GifTastic</title>
     <link rel="basic css" href ="css/reset.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+          margin: 10px;
+        }
+      </style>
     
 
 </head>
 
+<body>
+    <div class="container">
+        <h1>gif Search</h1>
+    
+        <!-- GIF button will be here -->
+        <div id="buttons-view"></div>
+    
+        <!-- search area to add new buttons-->
+        <form id="gif-form">
+          <label for="gif-input">Add x new button for GIFs</label>
+          <input type="text" id="gif-input"><br>
+          <input id="add-gif" type="submit" value="Add!">
+        </form>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        // Initial array of gifs
+    var gifs = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+
+    // Function for gif buttons
+    function addButtons() {
+        // Deleting existing buttons
+        $("#buttons-view").empty();
+
+        // adding new buttons
+        for (var i = 0; i < gifs.length; i++) {
+            var x = $("<button>");
+            // class
+            x.addClass("gif");
+            // data-attribute 
+            x.attr("data-name", gifs[i]);
+            // button text
+            x.text(gifs[i]);
+            // Adding the button to the HTML
+            $("#buttons-view").append(x);
+        }
+    }
+
+    // function handles events where one button is clicked
+    $("#add-gif").on("click", function(event) {
+        // to avoid form from submitting
+        event.preventDefault();
+
+        // adding new query into the gifs array
+        var gif = $("#gif-input").val().trim();
+        gifs.push(gif);
+        addButtons();
+    });
+
+    addButtons();
+
+        function callGif() {
+            var queryURL = "https://api.giphy.com/v1/gifs/trending?api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U";
+
+            $.ajax({
+            url: queryURL,
+            method: "GET"
+            }).then(function(response) {
+            console.log(response);
+            });
+        }
+    
+    </script>
+    </div>
+</body>
 
 
 </html>
