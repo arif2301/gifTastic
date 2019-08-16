@@ -23,17 +23,22 @@
         <h1>gif Search</h1>
     
         <!-- GIF button will be here -->
-        <div id="buttons-view"></div>
-    
-        <!-- search area to add new buttons-->
-        <form id="gif-form">
-          <label for="gif-input">Add a new button for GIFs</label>
-          <input type="text" id="gif-input"><br>
-          <input id="add-gif" type="submit" value="Add!">
-        </form>
+        <div class="row">
+            <div class="col-md-8" id="buttons-view"></div>
+        
+            <!-- search area to add new buttons-->
+            <div class="col-md-4">
+            <form id="gif-form">
+            <label for="gif-input">Add a new button for GIFs</label>
+            <input type="text" id="gif-input"><br>
+            <input id="add-gif" type="submit" value="Add!">
+            </form>
+            </div>
+        </div>
 
-        <!-- gifs to be presented here-->
-        <div id="gifs-view"></div>
+
+
+        <div class="row" class="col-md-4" id="gifs-view"></div>
 
         
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -70,22 +75,27 @@
 
         // adding new query into the gifs array
         var gif = $("#gif-input").val().trim();
-        gifs.push(gif);
+        topics.push(gif);
         addButtons();
     });
 
     addButtons();
 
     function callGif() {
+
+        // deleting previously displayed gifs
+        $("#gifs-view").empty();
         var person = $(this).attr("data-name");
 
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U&limit=10";
 
+        
         $.ajax({
         url: queryURL,
         method: "GET"
         }).then(function(response) {
-        console.log(response);
+        console.log(person);
+        console.log(queryURL);
 
           // Storing an array of results in the results variable
           var results = response.data;
@@ -105,15 +115,15 @@
               var p = $("<p>").text("Rating: " + rating);
 
               // Creating an image tag
-              var personImage = $("<img>");
+              var image = $("<img>");
 
               // Giving the image tag an src attribute of a proprty pulled off the
               // result item
-              personImage.attr("src", results[i].images.fixed_height.url);
+              image.attr("src", results[i].images.fixed_height.url);
 
-              // Appending the paragraph and personImage we created to the "gifDiv" div we created
+              // Appending the paragraph and image we created to the "gifDiv" div we created
               gifDiv.append(p);
-              gifDiv.append(personImage);
+              gifDiv.append(image);
 
               // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
               $("#gifs-view").prepend(gifDiv);
@@ -121,75 +131,7 @@
           }
         });
     }
-    
 
-    function displayMovieInfo() {
-
-        // deleting previously displayed gifs
-        $("#gifs-view").empty();
-
-        var movie = $(this).attr("data-name");
-        var queryURL = "https://www.omdbapi.com/?t=" + movie + "&apikey=trilogy";
-
-        // Creating an AJAX call for the specific movie button being clicked
-        $.ajax({
-        url: queryURL,
-        method: "GET"
-        }).then(function(response) {
-
-        // Creating a div to hold the movie
-        var movieDiv = $("<div class='gif'>");
-
-        // Storing the rating data
-        var rating = response.Rated;
-
-        // Creating an element to have the rating displayed
-        var pOne = $("<p>").text("Rating: " + rating);
-
-        // Displaying the rating
-        movieDiv.append(pOne);
-
-        // Storing the release year
-        var released = response.Released;
-
-        // Creating an element to hold the release year
-        var pTwo = $("<p>").text("Released: " + released);
-
-        // Displaying the release year
-        movieDiv.append(pTwo);
-
-        // Storing the plot
-        var plot = response.Plot;
-
-        // Creating an element to hold the plot
-        var pThree = $("<p>").text("Plot: " + plot);
-
-        // Appending the plot
-        movieDiv.append(pThree);
-
-        // Retrieving the URL for the image
-        var imgURL = response.Poster;
-
-        // Creating an element to hold the image
-        var image = $("<img>").attr("src", imgURL);
-
-        // Appending the image
-        movieDiv.append(image);
-
-        // Putting the entire movie above the previous movies
-        $("#gifs-view").prepend(movieDiv);
-        });
-
-    }
-
-
-    //testing function
-    function alertMovieName() {
-        var movieName = $(this).attr("data-name");
-
-        alert(movieName);
-        }
-     
     // gif button click event 
     $(document).on("click", ".gif", callGif);
 
