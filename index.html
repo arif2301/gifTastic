@@ -27,32 +27,37 @@
     
         <!-- search area to add new buttons-->
         <form id="gif-form">
-          <label for="gif-input">Add x new button for GIFs</label>
+          <label for="gif-input">Add a new button for GIFs</label>
           <input type="text" id="gif-input"><br>
           <input id="add-gif" type="submit" value="Add!">
         </form>
+
+        <!-- gifs to be presented here-->
+        <div id="gifs-view"></div>
 
         
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
 
         // Initial array of gifs
-    var gifs = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+    var topics = ["Will Farrell", "30 Rock", "Jet Li", "Parkour"];
 
     // Function for gif buttons
     function addButtons() {
         // Deleting existing buttons
         $("#buttons-view").empty();
+        // deleting previously displayed gifs
+        $("#gifs-view").empty();
 
         // adding new buttons
-        for (var i = 0; i < gifs.length; i++) {
+        for (var i = 0; i < topics.length; i++) {
             var x = $("<button>");
             // class
             x.addClass("gif");
             // data-attribute 
-            x.attr("data-name", gifs[i]);
+            x.attr("data-name", topics[i]);
             // button text
-            x.text(gifs[i]);
+            x.text(topics[i]);
             // Adding the button to the HTML
             $("#buttons-view").append(x);
         }
@@ -71,17 +76,123 @@
 
     addButtons();
 
-        function callGif() {
-            var queryURL = "https://api.giphy.com/v1/gifs/trending?api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U";
+    function callGif() {
+        var person = $(this).attr("data-name");
 
-            $.ajax({
-            url: queryURL,
-            method: "GET"
-            }).then(function(response) {
-            console.log(response);
-            });
-        }
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U&limit=10";
+
+        $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).then(function(response) {
+        console.log(response);
+
+          // Storing an array of results in the results variable
+          var results = response.data;
+
+          // Looping over every result item
+          for (var i = 0; i < results.length; i++) {
+
+            // Only taking action if the photo has an appropriate rating
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+              // Creating a div for the gif
+              var gifDiv = $("<div>");
+
+              // Storing the result item's rating
+              var rating = results[i].rating;
+
+              // Creating a paragraph tag with the result item's rating
+              var p = $("<p>").text("Rating: " + rating);
+
+              // Creating an image tag
+              var personImage = $("<img>");
+
+              // Giving the image tag an src attribute of a proprty pulled off the
+              // result item
+              personImage.attr("src", results[i].images.fixed_height.url);
+
+              // Appending the paragraph and personImage we created to the "gifDiv" div we created
+              gifDiv.append(p);
+              gifDiv.append(personImage);
+
+              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+              $("#gifs-view").prepend(gifDiv);
+            }
+          }
+        });
+    }
     
+
+    function displayMovieInfo() {
+
+        // deleting previously displayed gifs
+        $("#gifs-view").empty();
+
+        var movie = $(this).attr("data-name");
+        var queryURL = "https://www.omdbapi.com/?t=" + movie + "&apikey=trilogy";
+
+        // Creating an AJAX call for the specific movie button being clicked
+        $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).then(function(response) {
+
+        // Creating a div to hold the movie
+        var movieDiv = $("<div class='gif'>");
+
+        // Storing the rating data
+        var rating = response.Rated;
+
+        // Creating an element to have the rating displayed
+        var pOne = $("<p>").text("Rating: " + rating);
+
+        // Displaying the rating
+        movieDiv.append(pOne);
+
+        // Storing the release year
+        var released = response.Released;
+
+        // Creating an element to hold the release year
+        var pTwo = $("<p>").text("Released: " + released);
+
+        // Displaying the release year
+        movieDiv.append(pTwo);
+
+        // Storing the plot
+        var plot = response.Plot;
+
+        // Creating an element to hold the plot
+        var pThree = $("<p>").text("Plot: " + plot);
+
+        // Appending the plot
+        movieDiv.append(pThree);
+
+        // Retrieving the URL for the image
+        var imgURL = response.Poster;
+
+        // Creating an element to hold the image
+        var image = $("<img>").attr("src", imgURL);
+
+        // Appending the image
+        movieDiv.append(image);
+
+        // Putting the entire movie above the previous movies
+        $("#gifs-view").prepend(movieDiv);
+        });
+
+    }
+
+
+    //testing function
+    function alertMovieName() {
+        var movieName = $(this).attr("data-name");
+
+        alert(movieName);
+        }
+     
+    // gif button click event 
+    $(document).on("click", ".gif", callGif);
+
     </script>
     </div>
 </body>
