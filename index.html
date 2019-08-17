@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style type="text/css">
         button,
-        div,
         form,
         input {
           margin: 10px;
         }
       </style>
+
     
 
 </head>
@@ -35,108 +35,24 @@
             </form>
             </div>
         </div>
+    
 
+        <!--<div class = "containter">
+            
+        </div>-->
 
-
-        <div class="row" class="col-md-4" id="gifs-view"></div>
-
-        
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
-
-        // Initial array of gifs
-    var topics = ["Will Farrell", "30 Rock", "Jet Li", "Parkour"];
-
-    // Function for gif buttons
-    function addButtons() {
-        // Deleting existing buttons
-        $("#buttons-view").empty();
-        // deleting previously displayed gifs
-        $("#gifs-view").empty();
-
-        // adding new buttons
-        for (var i = 0; i < topics.length; i++) {
-            var x = $("<button>");
-            // class
-            x.addClass("gif");
-            // data-attribute 
-            x.attr("data-name", topics[i]);
-            // button text
-            x.text(topics[i]);
-            // Adding the button to the HTML
-            $("#buttons-view").append(x);
-        }
-    }
-
-    // function handles events where one button is clicked
-    $("#add-gif").on("click", function(event) {
-        // to avoid form from submitting
-        event.preventDefault();
-
-        // adding new query into the gifs array
-        var gif = $("#gif-input").val().trim();
-        topics.push(gif);
-        addButtons();
-    });
-
-    addButtons();
-
-    function callGif() {
-
-        // deleting previously displayed gifs
-        $("#gifs-view").empty();
-        var person = $(this).attr("data-name");
-
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person + "&api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U&limit=10";
-
-        
-        $.ajax({
-        url: queryURL,
-        method: "GET"
-        }).then(function(response) {
-        console.log(person);
-        console.log(queryURL);
-
-          // Storing an array of results in the results variable
-          var results = response.data;
-
-          // Looping over every result item
-          for (var i = 0; i < results.length; i++) {
-
-            // Only taking action if the photo has an appropriate rating
-            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-              // Creating a div for the gif
-              var gifDiv = $("<div>");
-
-              // Storing the result item's rating
-              var rating = results[i].rating;
-
-              // Creating a paragraph tag with the result item's rating
-              var p = $("<p>").text("Rating: " + rating);
-
-              // Creating an image tag
-              var image = $("<img>");
-
-              // Giving the image tag an src attribute of a proprty pulled off the
-              // result item
-              image.attr("src", results[i].images.fixed_height.url);
-
-              // Appending the paragraph and image we created to the "gifDiv" div we created
-              gifDiv.append(p);
-              gifDiv.append(image);
-
-              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-              $("#gifs-view").prepend(gifDiv);
-            }
-          }
-        });
-    }
-
-    // gif button click event 
-    $(document).on("click", ".gif", callGif);
-
-    </script>
+        <div class = "row" id="gifs-view">
+            
+        </div>    
+ 
     </div>
+        
+
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="giftastic.js"></script>
+
 </body>
 
 
