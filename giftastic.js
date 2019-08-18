@@ -1,10 +1,6 @@
 $( document ).ready(function() {
-  
 
-
-console.log(" js file is loanded");
 var topics = ["Toy Story", "Top Gear", "Go Pro", "Finding Nemo"];
-
 var gifResult = [];
 
 // Function for gif buttons
@@ -49,7 +45,6 @@ function callGif() {
 
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=TAUEmG8XELuVn6145E8v2Id4wyP8yB0U&limit=10";
 
-    
     $.ajax({
     url: queryURL,
     method: "GET"
@@ -63,40 +58,41 @@ function callGif() {
         // Looping over every result item
         for (var i = 0; i < results.length; i++) {
 
-        // Only taking action if the photo has an appropriate rating
-        if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-            // Creating a div for the gif
-            var gifDiv = $("<div class=col-md-4>");
-            //gifDiv.addClass("gifclick");
+            // Only taking action if the photo has an appropriate rating
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+                // Creating a div for the gif
+                var gifDiv = $("<div class=col-md-4>");
 
-            // Storing the result item's rating
-            var rating = results[i].rating;
+                // Storing the result item's rating
+                var rating = results[i].rating;
 
-            //  paragraph tag with the item's rating
-            var p = $("<p>").text("Rating: " + rating);
+                //  paragraph tag with the item's rating
+                var p = $("<p>").text("Rating: " + rating);
 
-            // image tag
-            var image = $("<img>");
-            //image.attr("src", results[i].images.fixed_height.url);
-            //fixed_height_still
+                // image tag
+                var image = $("<img>");
 
-            var animate = results[i].images.fixed_height.url;
-            var still = results[i].images.fixed_height_still.url;
-            
-            image.attr("src", still);
+                // saving both animated and still versions of each gif
+                var animate = results[i].images.fixed_height.url;
+                var still = results[i].images.fixed_height_still.url;
+                
+                // initial state
+                image.attr("src", still);
 
-            image.attr("data-animate", animate);
-            image.attr("data-still", still);
-            image.attr("data-state", "still");
-            image.addClass("gifclick");
+                image.attr("data-animate", animate);
+                image.attr("data-still", still);
+                image.attr("data-state", "still");
 
-            // add it to the object
-            gifDiv.append(p);
-            gifDiv.append(image);
+                // class specifically to manipulate data-state
+                image.addClass("gifclick");
 
-            // display
-            $("#gifs-view").prepend(gifDiv);
-        }
+                // add it to the object
+                gifDiv.append(p);
+                gifDiv.append(image);
+
+                // display
+                $("#gifs-view").prepend(gifDiv);
+            }
         }
     });
 }
