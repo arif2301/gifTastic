@@ -16,7 +16,7 @@ It was made to explore:
 
 ## Guide to this project:
 
-* Step 1: Click on the link - https://arif2301.github.io/gifTastic/ to go to the webpage. Then start by searching for a subject
+* Step 1: Click on the link - https://arif2301.github.io/gifTastic/ to go to the webpage. Then start by searching for a subject and click on the button 'Add!'
 ![](photos/search1.PNG)
 
 
