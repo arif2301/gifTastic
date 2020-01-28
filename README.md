@@ -8,4 +8,4 @@ It was made to explore:
 * filtering through ratings 
 * putting in a pause and play function by click the GIF image
 
-![]()
+![](photos/main.PNG)
